@@ -14,46 +14,29 @@ func HttpMain(
 	config *config.Container,
 	resource *mongo.Resource,
 ) {
-	// ## dependency injection ##
-	// user
+	// === Dependency Injection ===
+	// Repositories
 	userRepo := repository.NewUserRepository(resource.DB)
-
-	// room
 	roomRepo := repository.NewRoomRepository(resource.DB)
-
-	// chat
 	chatRepo := repository.NewChatRepository(resource.DB)
 
-	// ## service ##
-	// user
-	userService := service.NewUserService(
-		userRepo,
-	)
+	// Services (Application)
+	userService := service.NewAuthenticationService(userRepo)
+	roomService := service.NewRoomService(roomRepo)
+	chatService := service.NewChatService(chatRepo)
 
-	// room
-	roomService := service.NewRoomService(
-		roomRepo,
-	)
-
-	// chat
-	chatService := service.NewChatService(
-		chatRepo,
-	)
-
-	// ## handler ##
-	userHandler := httpServer.NewUserHandler(userService)
-
+	// HTTP Handlers (Adapters)
+	authenticationHandler := httpServer.NewAuthenticationHandler(userService)
 	roomHandler := httpServer.NewRoomHandler(roomService)
-
 	chatHandler := httpServer.NewChatHandler(chatService)
 
 	// router
 	fmt.Println("initializing router")
 	router, err := httpServer.NewRouter(
 		config.HTTP,
-		*chatHandler,
-		*roomHandler,
-		*userHandler,
+		chatHandler,
+		roomHandler,
+		authenticationHandler,
 	)
 	if err != nil {
 		log.Fatalf("Error initializing router", err)

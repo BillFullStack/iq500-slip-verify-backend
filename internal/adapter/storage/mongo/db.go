@@ -33,13 +33,14 @@ func New(config *config.DB) (*Resource, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	// messageClient, err := connectDB(messageConfig)
 	// if err != nil {
 	// 	return nil, err
 	// }
 
 	color.Green("Connect database successfully")
-	color.Green(config.Connection)
+
 	return &Resource{
 		DB: client.Database(config.Name),
 	}, nil

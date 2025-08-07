@@ -13,9 +13,9 @@ type Router struct {
 
 func NewRouter(
 	config *config.HTTP,
-	chatHandler ChatHandler,
-	roomHandler RoomHandler,
-	userHandler UserHandler,
+	chatHandler *ChatHandler,
+	roomHandler *RoomHandler,
+	authHandler *AuthenticationHandler,
 ) (*Router, error) {
 	router := gin.Default()
 	router.Use(CORS)
@@ -27,6 +27,30 @@ func NewRouter(
 			"version": "1.0.1",
 		})
 	})
+
+	api := router.Group("/api")
+	auth := router.Group("/api")
+	// auth.Use(middlewares.AuthTokenMember)
+
+	// authentication
+	api.POST("/login", authHandler.Login)
+	api.POST("/register", authHandler.Register)
+	api.POST("/reset-password", authHandler.ResetPassword)
+
+	// chat
+	chat := auth.Group("/chat")
+	{
+		chat.GET("/:id", chatHandler.GetChatByRoomID)
+		chat.POST("", chatHandler.Chat)
+	}
+
+	// room
+	room := auth.Group("/room")
+	{
+		room.GET("", roomHandler.GetRoom)
+		room.POST("", roomHandler.CreateRoom)
+		room.DELETE("/:id", roomHandler.DeleteRoomByID)
+	}
 
 	return &Router{
 		router,

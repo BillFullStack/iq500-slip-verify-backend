@@ -2,14 +2,14 @@ package service
 
 import "main/internal/core/port"
 
-type UserService struct {
+type AuthenticationService struct {
 	userRepo port.UserRepository
 }
 
-func NewUserService(
+func NewAuthenticationService(
 	userRepo port.UserRepository,
-) *UserService {
-	return &UserService{
+) *AuthenticationService {
+	return &AuthenticationService{
 		userRepo,
 	}
 }
