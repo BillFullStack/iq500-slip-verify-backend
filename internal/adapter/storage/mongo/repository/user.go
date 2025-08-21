@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"main/internal/core/domain"
+	"main/utils"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -71,7 +72,7 @@ func (r *UserRepository) UpdatePasswordUser(id primitive.ObjectID, password stri
 
 	set := bson.M{
 		"$set": bson.M{
-			"password":  password,
+			"password":  utils.MD5Hash(password),
 			"update_at": time.Now(),
 		},
 	}

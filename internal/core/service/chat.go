@@ -44,10 +44,13 @@ func (s *ChatService) Chat(c *gin.Context, payload domain.PayloadChat) error {
 	}
 
 	messageType := ""
+	message := ""
 	if payload.Message != "" {
 		messageType = "text"
+		message = payload.Message
 	} else {
 		messageType = "image"
+		message = payload.Img
 	}
 
 	roomID, _ := primitive.ObjectIDFromHex(payload.RoomID)
@@ -57,7 +60,7 @@ func (s *ChatService) Chat(c *gin.Context, payload domain.PayloadChat) error {
 		RoomID:      roomID,
 		Type:        "reply",
 		MessageType: messageType,
-		Message:     payload.Message,
+		Message:     message,
 		UpdateAt:    time.Now(),
 		CreateAt:    time.Now(),
 	}
