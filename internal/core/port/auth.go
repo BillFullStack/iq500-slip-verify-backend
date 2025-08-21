@@ -1,7 +1,13 @@
 package port
 
-type UserRepository interface {
-}
+import (
+	"main/internal/core/domain"
+
+	"github.com/gin-gonic/gin"
+)
 
 type AuthenticationService interface {
+	Login(c *gin.Context, payload domain.PayloadUser) (string, error)
+	Register(c *gin.Context, payload domain.PayloadUser) error
+	ResetPassword(c *gin.Context, payload domain.PayloadResetPassword) error
 }

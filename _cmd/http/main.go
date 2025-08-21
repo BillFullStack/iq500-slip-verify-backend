@@ -33,7 +33,7 @@ func HttpMain(
 	// router
 	fmt.Println("initializing router")
 	router, err := httpServer.NewRouter(
-		config.HTTP,
+		resource.DB,
 		chatHandler,
 		roomHandler,
 		authenticationHandler,

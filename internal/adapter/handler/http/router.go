@@ -1,8 +1,10 @@
 package http
 
 import (
-	"main/internal/adapter/config"
+	"main/utils"
 	"net/http"
+
+	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,7 +14,7 @@ type Router struct {
 }
 
 func NewRouter(
-	config *config.HTTP,
+	resource *mongo.Database,
 	chatHandler *ChatHandler,
 	roomHandler *RoomHandler,
 	authHandler *AuthenticationHandler,
@@ -30,7 +32,7 @@ func NewRouter(
 
 	api := router.Group("/api")
 	auth := router.Group("/api")
-	// auth.Use(middlewares.AuthTokenMember)
+	auth.Use(utils.Authentication(resource))
 
 	// authentication
 	api.POST("/login", authHandler.Login)

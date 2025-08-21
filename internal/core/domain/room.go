@@ -13,3 +13,7 @@ type Room struct {
 	UpdateAt    time.Time          `json:"update_at" bson:"update_at"`
 	CreateAt    time.Time          `json:"create_at" bson:"create_at"`
 }
+
+type PayloadRoom struct {
+	Message string `json:"message"`
+}
