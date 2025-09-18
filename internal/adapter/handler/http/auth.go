@@ -37,7 +37,7 @@ func (h *AuthenticationHandler) Login(c *gin.Context) {
 		return
 	}
 
-	utils.Response(c, http.StatusOK, 0, "success", "ok", token)
+	utils.Response(c, http.StatusOK, 200, "success", "ok", token)
 }
 
 func (h *AuthenticationHandler) Register(c *gin.Context) {
