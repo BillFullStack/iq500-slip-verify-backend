@@ -23,7 +23,7 @@ func HttpMain(
 	// Services (Application)
 	userService := service.NewAuthenticationService(userRepo)
 	roomService := service.NewRoomService(roomRepo)
-	chatService := service.NewChatService(chatRepo)
+	chatService := service.NewChatService(chatRepo, roomRepo)
 
 	// HTTP Handlers (Adapters)
 	authenticationHandler := httpServer.NewAuthenticationHandler(userService)

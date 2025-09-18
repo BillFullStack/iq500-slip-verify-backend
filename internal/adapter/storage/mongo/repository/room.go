@@ -42,11 +42,13 @@ func (r *RoomRepository) GetRoomByUserId(id primitive.ObjectID) ([]domain.Room, 
 
 	obj, err := r.DB.Collection(ROOM_COLLECTION).Find(c, filter, option)
 	if err != nil {
+		fmt.Println("get room by user id err: ", err)
 		return nil, err
 	}
 
 	err = obj.All(c, &room)
 	if err != nil {
+		fmt.Println("get room by user id err: ", err)
 		return nil, err
 	}
 
@@ -60,6 +62,7 @@ func (r *RoomRepository) CreateRoom(payload domain.Room) error {
 	_, err := r.DB.Collection(ROOM_COLLECTION).InsertOne(c, payload)
 
 	if err != nil {
+		fmt.Println("create room err: ", err)
 		return err
 	}
 	return nil
@@ -75,7 +78,30 @@ func (r *RoomRepository) DeleteRoomByID(id primitive.ObjectID) error {
 
 	_, err := r.DB.Collection(ROOM_COLLECTION).DeleteOne(c, filter)
 	if err != nil {
-		fmt.Println("delete category platform by business code err: ", err)
+		fmt.Println("delete room by id err: ", err)
+		return err
+	}
+	return nil
+}
+
+func (r *RoomRepository) UpdateLastMessage(id primitive.ObjectID, lastMessage string) error {
+	c, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	filter := bson.M{
+		"_id": id,
+	}
+
+	set := bson.M{
+		"$set": bson.M{
+			"last_message": lastMessage,
+			"update_at":    time.Now(),
+		},
+	}
+
+	_, err := r.DB.Collection(ROOM_COLLECTION).UpdateOne(c, filter, set)
+	if err != nil {
+		fmt.Println("update last message err: ", err)
 		return err
 	}
 	return nil

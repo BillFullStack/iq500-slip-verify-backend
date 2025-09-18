@@ -44,11 +44,16 @@ func (h *RoomHandler) CreateRoom(c *gin.Context) {
 		return
 	}
 
-	if err := h.svc.CreateRoom(c, payload); err != nil {
+	id, err := h.svc.CreateRoom(c, payload)
+	if err != nil {
 		return
 	}
 
-	utils.Response(c, http.StatusOK, 200, "success", "ok", nil)
+	response := domain.ResponseCreateRoom{
+		ID: id,
+	}
+
+	utils.Response(c, http.StatusOK, 200, "success", "ok", response)
 }
 
 func (h *RoomHandler) DeleteRoomByID(c *gin.Context) {

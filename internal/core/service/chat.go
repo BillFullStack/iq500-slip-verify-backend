@@ -15,13 +15,16 @@ import (
 
 type ChatService struct {
 	chatRepo port.ChatRepository
+	roomRepo port.RoomRepository
 }
 
 func NewChatService(
 	chatRepo port.ChatRepository,
+	roomRepo port.RoomRepository,
 ) *ChatService {
 	return &ChatService{
 		chatRepo,
+		roomRepo,
 	}
 }
 
@@ -68,6 +71,19 @@ func (s *ChatService) Chat(c *gin.Context, payload domain.PayloadChat) error {
 	err := s.chatRepo.CreateChat(chat)
 	if err != nil {
 		fmt.Println("error create chat", err)
+		utils.Response(c, http.StatusInternalServerError, 500, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
+		return err
+	}
+
+	lastMessage := ""
+	if chat.MessageType == "text" {
+		lastMessage = chat.Message
+	} else {
+		lastMessage = "ส่งรูปภาพ"
+	}
+	err = s.roomRepo.UpdateLastMessage(roomID, lastMessage)
+	if err != nil {
+		fmt.Println("error update last message", err)
 		utils.Response(c, http.StatusInternalServerError, 500, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
 		return err
 	}

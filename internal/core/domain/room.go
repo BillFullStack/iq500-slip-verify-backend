@@ -17,3 +17,7 @@ type Room struct {
 type PayloadRoom struct {
 	Message string `json:"message"`
 }
+
+type ResponseCreateRoom struct {
+	ID primitive.ObjectID `json:"id"`
+}

@@ -35,11 +35,13 @@ func (s *RoomService) GetRoomByUserId(c *gin.Context, id primitive.ObjectID) ([]
 	return room, nil
 }
 
-func (s *RoomService) CreateRoom(c *gin.Context, payload domain.PayloadRoom) error {
+func (s *RoomService) CreateRoom(c *gin.Context, payload domain.PayloadRoom) (primitive.ObjectID, error) {
 	userId, _ := primitive.ObjectIDFromHex(c.GetString("user_id"))
 
+	id := primitive.NewObjectID()
+
 	room := domain.Room{
-		ID:          primitive.NewObjectID(),
+		ID:          id,
 		UserID:      userId,
 		LastMessage: payload.Message,
 		UpdateAt:    time.Now(),
@@ -49,10 +51,10 @@ func (s *RoomService) CreateRoom(c *gin.Context, payload domain.PayloadRoom) err
 	if err := s.roomRepo.CreateRoom(room); err != nil {
 		fmt.Println("error create room", err)
 		utils.Response(c, http.StatusInternalServerError, 500, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
-		return err
+		return primitive.NilObjectID, err
 	}
 
-	return nil
+	return id, nil
 }
 
 func (s *RoomService) DeleteRoomByID(c *gin.Context, id primitive.ObjectID) error {
