@@ -27,12 +27,11 @@ func (h *AuthenticationHandler) Login(c *gin.Context) {
 
 	if err := c.ShouldBind(&payload); err != nil {
 		fmt.Println("error bind", err)
-		utils.Response(c, http.StatusBadRequest, 1, "ข้อมูลไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
+		utils.Response(c, http.StatusBadRequest, 400, "ข้อมูลไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
 		return
 	}
 
 	token, err := h.svc.Login(c, payload)
-
 	if err != nil {
 		return
 	}
@@ -46,7 +45,7 @@ func (h *AuthenticationHandler) Register(c *gin.Context) {
 	var payload domain.PayloadUser
 	if err := c.ShouldBind(&payload); err != nil {
 		fmt.Println("error bind", err)
-		utils.Response(c, http.StatusBadRequest, 1, "ข้อมูลไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
+		utils.Response(c, http.StatusBadRequest, 400, "ข้อมูลไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
 		return
 	}
 
@@ -63,7 +62,7 @@ func (h *AuthenticationHandler) ResetPassword(c *gin.Context) {
 	var payload domain.PayloadResetPassword
 	if err := c.ShouldBind(&payload); err != nil {
 		fmt.Println("error bind", err)
-		utils.Response(c, http.StatusBadRequest, 1, "ข้อมูลไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
+		utils.Response(c, http.StatusBadRequest, 400, "ข้อมูลไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
 		return
 	}
 

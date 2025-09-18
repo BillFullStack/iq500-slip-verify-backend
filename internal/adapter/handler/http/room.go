@@ -31,7 +31,7 @@ func (h *RoomHandler) GetRoom(c *gin.Context) {
 		return
 	}
 
-	utils.Response(c, http.StatusOK, 0, "success", "ok", room)
+	utils.Response(c, http.StatusOK, 200, "success", "ok", room)
 }
 
 func (h *RoomHandler) CreateRoom(c *gin.Context) {
@@ -48,7 +48,7 @@ func (h *RoomHandler) CreateRoom(c *gin.Context) {
 		return
 	}
 
-	utils.Response(c, http.StatusOK, 0, "success", "ok", nil)
+	utils.Response(c, http.StatusOK, 200, "success", "ok", nil)
 }
 
 func (h *RoomHandler) DeleteRoomByID(c *gin.Context) {
@@ -60,5 +60,5 @@ func (h *RoomHandler) DeleteRoomByID(c *gin.Context) {
 		return
 	}
 
-	utils.Response(c, http.StatusOK, 0, "success", "ok", nil)
+	utils.Response(c, http.StatusOK, 200, "success", "ok", nil)
 }

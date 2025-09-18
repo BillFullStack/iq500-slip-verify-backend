@@ -29,7 +29,7 @@ func (s *ChatService) GetChatByRoomID(c *gin.Context, id primitive.ObjectID) ([]
 	chat, err := s.chatRepo.GetChatByRoomID(id)
 	if err != nil {
 		fmt.Println("error get chat", err)
-		utils.Response(c, http.StatusBadRequest, 1, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
+		utils.Response(c, http.StatusInternalServerError, 500, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
 		return nil, err
 	}
 
@@ -39,7 +39,7 @@ func (s *ChatService) GetChatByRoomID(c *gin.Context, id primitive.ObjectID) ([]
 func (s *ChatService) Chat(c *gin.Context, payload domain.PayloadChat) error {
 	if payload.Message == "" && payload.Img == "" {
 		fmt.Println("err message and img is empty")
-		utils.Response(c, http.StatusBadRequest, 1, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", "err message and img is empty", nil)
+		utils.Response(c, http.StatusBadRequest, 400, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", "err message and img is empty", nil)
 		return errors.New("err message and img is empty")
 	}
 
@@ -68,7 +68,7 @@ func (s *ChatService) Chat(c *gin.Context, payload domain.PayloadChat) error {
 	err := s.chatRepo.CreateChat(chat)
 	if err != nil {
 		fmt.Println("error create chat", err)
-		utils.Response(c, http.StatusBadRequest, 1, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
+		utils.Response(c, http.StatusInternalServerError, 500, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
 		return err
 	}
 

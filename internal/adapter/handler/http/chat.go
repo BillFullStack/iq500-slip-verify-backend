@@ -31,7 +31,7 @@ func (h *ChatHandler) GetChatByRoomID(c *gin.Context) {
 		return
 	}
 
-	utils.Response(c, http.StatusOK, 0, "success", "ok", chat)
+	utils.Response(c, http.StatusOK, 200, "success", "ok", chat)
 }
 
 func (h *ChatHandler) Chat(c *gin.Context) {
@@ -48,5 +48,5 @@ func (h *ChatHandler) Chat(c *gin.Context) {
 		return
 	}
 
-	utils.Response(c, http.StatusOK, 0, "success", "ok", nil)
+	utils.Response(c, http.StatusOK, 200, "success", "ok", nil)
 }

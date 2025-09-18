@@ -28,7 +28,7 @@ func (s *RoomService) GetRoomByUserId(c *gin.Context, id primitive.ObjectID) ([]
 	room, err := s.roomRepo.GetRoomByUserId(id)
 	if err != nil {
 		fmt.Println("error get room", err)
-		utils.Response(c, http.StatusBadRequest, 1, "ไม่พบห้อง กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
+		utils.Response(c, http.StatusInternalServerError, 500, "ไม่พบห้อง กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
 		return nil, err
 	}
 
@@ -48,7 +48,7 @@ func (s *RoomService) CreateRoom(c *gin.Context, payload domain.PayloadRoom) err
 
 	if err := s.roomRepo.CreateRoom(room); err != nil {
 		fmt.Println("error create room", err)
-		utils.Response(c, http.StatusBadRequest, 1, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
+		utils.Response(c, http.StatusInternalServerError, 500, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
 		return err
 	}
 
@@ -58,7 +58,7 @@ func (s *RoomService) CreateRoom(c *gin.Context, payload domain.PayloadRoom) err
 func (s *RoomService) DeleteRoomByID(c *gin.Context, id primitive.ObjectID) error {
 	if err := s.roomRepo.DeleteRoomByID(id); err != nil {
 		fmt.Println("error delete room", err)
-		utils.Response(c, http.StatusBadRequest, 1, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
+		utils.Response(c, http.StatusInternalServerError, 500, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
 		return err
 	}
 

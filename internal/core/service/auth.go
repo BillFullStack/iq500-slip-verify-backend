@@ -29,13 +29,13 @@ func (s *AuthenticationService) Login(c *gin.Context, payload domain.PayloadUser
 	user, err := s.userRepo.GetUserByName(payload.Username)
 	if err != nil {
 		fmt.Println("error get user", err)
-		utils.Response(c, http.StatusBadRequest, 1, "ไม่พบยูสเซอร์ กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
+		utils.Response(c, http.StatusInternalServerError, 500, "ไม่พบยูสเซอร์ กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
 		return "", err
 	}
 
 	if utils.MD5Hash(payload.Password) != user.Password {
 		fmt.Println("error password not match", err)
-		utils.Response(c, http.StatusBadRequest, 1, "รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง", "password not match", nil)
+		utils.Response(c, http.StatusBadRequest, 400, "รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง", "password not match", nil)
 		return "", errors.New("password not match")
 	}
 
@@ -43,7 +43,7 @@ func (s *AuthenticationService) Login(c *gin.Context, payload domain.PayloadUser
 
 	if err := s.userRepo.UpdateToken(user.ID, token); err != nil {
 		fmt.Println("error get user", err)
-		utils.Response(c, http.StatusBadRequest, 1, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
+		utils.Response(c, http.StatusInternalServerError, 500, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
 		return "", err
 	}
 
@@ -62,7 +62,7 @@ func (s *AuthenticationService) Register(c *gin.Context, payload domain.PayloadU
 
 	if err := s.userRepo.CreateUser(user); err != nil {
 		fmt.Println("error create user", err)
-		utils.Response(c, http.StatusBadRequest, 1, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
+		utils.Response(c, http.StatusInternalServerError, 500, "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
 		return err
 	}
 
@@ -73,25 +73,25 @@ func (s *AuthenticationService) ResetPassword(c *gin.Context, payload domain.Pay
 	user, err := s.userRepo.GetUserByName(payload.Username)
 	if err != nil {
 		fmt.Println("error get user", err)
-		utils.Response(c, http.StatusBadRequest, 1, "ไม่พบยูสเซอร์ กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
+		utils.Response(c, http.StatusInternalServerError, 500, "ไม่พบยูสเซอร์ กรุณาลองใหม่อีกครั้ง", err.Error(), nil)
 		return err
 	}
 
 	if utils.MD5Hash(payload.OldPassword) != user.Password {
 		fmt.Println("error password not match", err)
-		utils.Response(c, http.StatusBadRequest, 1, "รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง", "password not match", nil)
+		utils.Response(c, http.StatusBadRequest, 400, "รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง", "password not match", nil)
 		return errors.New("password not match")
 	}
 
 	if payload.OldPassword == payload.NewPassword {
 		fmt.Println("error old password and new password is match", err)
-		utils.Response(c, http.StatusBadRequest, 1, "กรุณาลองใหม่อีกครั้ง", "error old password and new password is match", nil)
+		utils.Response(c, http.StatusBadRequest, 400, "กรุณาลองใหม่อีกครั้ง", "error old password and new password is match", nil)
 		return errors.New("error old password and new password is match")
 	}
 
 	if err := s.userRepo.UpdatePasswordUser(user.ID, payload.NewPassword); err != nil {
 		fmt.Println("error update password user", err)
-		utils.Response(c, http.StatusBadRequest, 1, "", err.Error(), nil)
+		utils.Response(c, http.StatusInternalServerError, 500, "", err.Error(), nil)
 		return err
 	}
 
